@@ -1,0 +1,834 @@
+[
+    {
+        "id": "6fecf9c0459d959c",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "080fe994e38d453e",
+        "type": "pptr config",
+        "name": "",
+        "executablePath": "\tC:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe",
+        "semaphoreCount": "1"
+    },
+    {
+        "id": "0523b584fa2aa35b",
+        "type": "postgreSQLConfig",
+        "name": "",
+        "host": "127.0.0.1",
+        "hostFieldType": "str",
+        "port": 5432,
+        "portFieldType": "num",
+        "database": "postgres",
+        "databaseFieldType": "str",
+        "ssl": "false",
+        "sslFieldType": "bool",
+        "applicationName": "",
+        "applicationNameType": "str",
+        "max": 10,
+        "maxFieldType": "num",
+        "idle": 1000,
+        "idleFieldType": "num",
+        "connectionTimeout": 10000,
+        "connectionTimeoutFieldType": "num",
+        "user": "postgres",
+        "userFieldType": "str",
+        "password": "password",
+        "passwordFieldType": "str"
+    },
+    {
+        "id": "88264418f5223eaa",
+        "type": "mqtt-broker",
+        "name": "datahub",
+        "broker": "192.168.1.23",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "ff448e98f7eb4d71",
+        "type": "http request",
+        "z": "6fecf9c0459d959c",
+        "name": "Fetch JSON from API",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 920,
+        "y": 320,
+        "wires": [
+            [
+                "11f79cf2564caf6f"
+            ]
+        ]
+    },
+    {
+        "id": "11f79cf2564caf6f",
+        "type": "function",
+        "z": "6fecf9c0459d959c",
+        "name": "GetAllAdsUrl",
+        "func": "msg.payload = msg.payload.pageProps.initialStore.ads.map(ad => {\n    return {\n        url: ad.attributes.adviewUrl\n    };\n});\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 320,
+        "wires": [
+            [
+                "40873fa2bbdbd28c",
+                "ae16d6f94636a109"
+            ]
+        ]
+    },
+    {
+        "id": "ae16d6f94636a109",
+        "type": "debug",
+        "z": "6fecf9c0459d959c",
+        "name": "Show All Url",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1410,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "40873fa2bbdbd28c",
+        "type": "function",
+        "z": "6fecf9c0459d959c",
+        "name": "SplitUrl",
+        "func": "let results = [];\nfor (let i = 0; i < msg.payload.length; i++) {\n    let item = msg.payload[i];\n    results.push({ payload: item });\n}\nreturn [results];\n\nmsg.payload = {\n    \"url\": msg.payload\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1160,
+        "y": 440,
+        "wires": [
+            [
+                "b90e8bb3421cdc82",
+                "54438ad6d01ea730"
+            ]
+        ]
+    },
+    {
+        "id": "b90e8bb3421cdc82",
+        "type": "debug",
+        "z": "6fecf9c0459d959c",
+        "name": "EachUrl",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1400,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "642c22e73d97295e",
+        "type": "debug",
+        "z": "6fecf9c0459d959c",
+        "name": "Show Details",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1950,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "54438ad6d01ea730",
+        "type": "delay",
+        "z": "6fecf9c0459d959c",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "10",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "5",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1180,
+        "y": 540,
+        "wires": [
+            [
+                "2765cf3afa51e6b5"
+            ]
+        ]
+    },
+    {
+        "id": "38e22754b954892c",
+        "type": "postgresql",
+        "z": "6fecf9c0459d959c",
+        "name": "",
+        "query": "",
+        "postgreSQLConfig": "0523b584fa2aa35b",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 1770,
+        "y": 640,
+        "wires": [
+            [
+                "642c22e73d97295e"
+            ]
+        ]
+    },
+    {
+        "id": "9b618bebe8464081",
+        "type": "postgresql",
+        "z": "6fecf9c0459d959c",
+        "name": "create user details table",
+        "query": "CREATE TABLE IF NOT EXISTS shins(\n    ads_id TEXT PRIMARY KEY,  -- ads_id as UUID (unique identifier)\n    prop_name TEXT,  -- property_name as TEXT\n    completion_year TEXT,  -- completion_year as INTEGER\n    monthly_rent TEXT,  -- monthly_rent as DECIMAL for currency value (2 decimal places)\n    location TEXT,  -- location as TEXT\n    property_type TEXT,  -- property_type as TEXT (just taking the first part before comma)\n    rooms TEXT,  -- rooms as INTEGER\n    parking TEXT,  -- parking spots as INTEGER\n    bathroom TEXT,  -- bathroom count as INTEGER\n    size TEXT,  -- size (sq.ft) as DECIMAL (2 decimal places)\n    furnished TEXT,  -- furnished status as TEXT (e.g., \"Partially Furnished\")\n    facilities TEXT,  -- facilities as TEXT (comma-separated list)\n    additional_facilities TEXT,  -- additional facilities as TEXT (comma-separated list)\n    createdon TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- createdon timestamp\n    modifiedon TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- modifiedon timestamp\n);\n",
+        "postgreSQLConfig": "0523b584fa2aa35b",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 670,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0f9ab1acbab2e5a4",
+        "type": "inject",
+        "z": "6fecf9c0459d959c",
+        "name": "Inject",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 470,
+        "y": 220,
+        "wires": [
+            [
+                "9b618bebe8464081"
+            ]
+        ]
+    },
+    {
+        "id": "e2eb26f6ab2ca6eb",
+        "type": "function",
+        "z": "6fecf9c0459d959c",
+        "name": "Set Format",
+        "func": "msg.params = [\n    msg.payload.ads_id,  // ads_id\n    msg.payload.property_name,  // property_name\n    parseInt(msg.payload.completion_year),  // completion_year (converted to integer)\n    parseFloat(msg.payload.monthly_rent.replace('RM', '').replace(' per month', '').replace(',', '').trim()),  // monthly_rent (converted to numeric)\n    msg.payload.location,  // location\n    msg.payload.property_type,  // property_type (taking the first part before comma)\n    parseInt(msg.payload.room_quantity),  // room_quantity (converted to integer)\n    parseInt(msg.payload.parking),  // parking (converted to integer)\n    parseInt(msg.payload.bathroom),  // bathroom (converted to integer)\n    parseFloat(msg.payload.size),  // size (converted to numeric)\n    msg.payload.furnished,  // furnished\n    msg.payload.facilities,  // facilities\n    msg.payload.additional_facilities,  // additional_facilities\n    new Date(), // createdon\n    new Date(),  // modifiedon\n    msg.payload.url\n];\n\nmsg.query = `INSERT INTO property (\n        ads_id,\n        prop_name,\n        completion_year,\n        monthly_rent,\n        location,\n        property_type,\n        rooms,\n        parking,\n        bathroom,\n        size,\n        furnished,\n        facilities,\n        additional_facilities,\n        createdon,\n        modifiedon,\n        url\n    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1590,
+        "y": 700,
+        "wires": [
+            [
+                "38e22754b954892c",
+                "319e8e4190868051"
+            ]
+        ]
+    },
+    {
+        "id": "fee970f31a311288",
+        "type": "debug",
+        "z": "6fecf9c0459d959c",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1660,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "319e8e4190868051",
+        "type": "debug",
+        "z": "6fecf9c0459d959c",
+        "name": "Show Details",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1790,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "6f91fae2f256be57",
+        "type": "inject",
+        "z": "6fecf9c0459d959c",
+        "name": "Get Property Data",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 510,
+        "y": 320,
+        "wires": [
+            [
+                "4f3747cc17504303"
+            ]
+        ]
+    },
+    {
+        "id": "4f3747cc17504303",
+        "type": "function",
+        "z": "6fecf9c0459d959c",
+        "name": "Get Page Url",
+        "func": "msg.method = \"GET\";\nmsg.url = \"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=26&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D26\";\n\nmsg.headers = {\n  \"accept\": \"*/*\",\n  \"accept-language\": \"en-GB,en;q=0.9,zh-CN;q=0.8,zh;q=0.7,en-US;q=0.6\",\n  \"dnt\": \"1\",\n  \"referer\": \"https://www.mudah.my/malaysia/properties-for-rent\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36\",\n  \"x-nextjs-data\": \"1\"\n\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 320,
+        "wires": [
+            [
+                "ff448e98f7eb4d71"
+            ]
+        ]
+    },
+    {
+        "id": "2765cf3afa51e6b5",
+        "type": "http request",
+        "z": "6fecf9c0459d959c",
+        "name": "python",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://192.168.0.192:5000/scrape",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1450,
+        "y": 540,
+        "wires": [
+            [
+                "fee970f31a311288",
+                "e2eb26f6ab2ca6eb"
+            ]
+        ]
+    },
+    {
+        "id": "f97a0aa5b0505991",
+        "type": "inject",
+        "z": "6fecf9c0459d959c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{   \"url\": \"https://www.mudah.my/sri-jati-condo-jalan-klang-lama-old-klang-road-semi-furnish-2carpark-111286164.htm\" }",
+        "payloadType": "json",
+        "x": 1410,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "171d7cddb6ebd74c",
+        "type": "function",
+        "z": "6fecf9c0459d959c",
+        "name": "function 6",
+        "func": "// Check if the payload has a valid url field and if the URL has already been sent\nlet urlSent = flow.get('urlSent') || false;  // Check if the flag is set\n\nif (msg.payload && msg.payload.url && !urlSent) {\n    // If the URL exists and hasn't been sent already, store the URL and mark as sent\n    \n    flow.set('urlSent', true);  // Set the flag to true, indicating that the URL has been processed\n} else {\n    // If the URL is missing or has already been sent, set a default error message\n    msg.payload = msg.payload.url;\n}\n\n// Return the message with the payload (URL or error message)\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1220,
+        "y": 700,
+        "wires": [
+            [
+                "91ead7db327369d3"
+            ]
+        ]
+    },
+    {
+        "id": "91ead7db327369d3",
+        "type": "delay",
+        "z": "6fecf9c0459d959c",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1360,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ab1240beea77e4af",
+        "type": "http request",
+        "z": "6fecf9c0459d959c",
+        "name": "Fetch JSON from API",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1300,
+        "y": 920,
+        "wires": [
+            [
+                "339e6de9f839ba9f"
+            ]
+        ]
+    },
+    {
+        "id": "339e6de9f839ba9f",
+        "type": "function",
+        "z": "6fecf9c0459d959c",
+        "name": "GetAllAdsUrl",
+        "func": "msg.payload = msg.payload.pageProps.initialStore.ads.map(ad => {\n    return {\n        url: ad.attributes.adviewUrl\n    };\n});\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1510,
+        "y": 920,
+        "wires": [
+            [
+                "2c7a5e5672e48bca",
+                "378dc9a04367e281"
+            ]
+        ]
+    },
+    {
+        "id": "378dc9a04367e281",
+        "type": "debug",
+        "z": "6fecf9c0459d959c",
+        "name": "Show All Url",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1770,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "2c7a5e5672e48bca",
+        "type": "function",
+        "z": "6fecf9c0459d959c",
+        "name": "SplitUrl",
+        "func": "let results = [];\nfor (let i = 0; i < msg.payload.length; i++) {\n    let item = msg.payload[i];\n    results.push({ payload: item });\n}\nreturn [results];\n\nmsg.payload = {\n    \"url\": msg.payload\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1520,
+        "y": 1040,
+        "wires": [
+            [
+                "5e388acd9fea6d7f",
+                "0df0ba1469335acd"
+            ]
+        ]
+    },
+    {
+        "id": "5e388acd9fea6d7f",
+        "type": "debug",
+        "z": "6fecf9c0459d959c",
+        "name": "EachUrl",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1760,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "8682eaa4054f0160",
+        "type": "debug",
+        "z": "6fecf9c0459d959c",
+        "name": "Show Details",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2310,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "0df0ba1469335acd",
+        "type": "delay",
+        "z": "6fecf9c0459d959c",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "10",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "7",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1540,
+        "y": 1140,
+        "wires": [
+            [
+                "137561d106b6c794"
+            ]
+        ]
+    },
+    {
+        "id": "85705dd54db9fcf1",
+        "type": "postgresql",
+        "z": "6fecf9c0459d959c",
+        "name": "",
+        "query": "",
+        "postgreSQLConfig": "0523b584fa2aa35b",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 2130,
+        "y": 1240,
+        "wires": [
+            [
+                "8682eaa4054f0160"
+            ]
+        ]
+    },
+    {
+        "id": "cce37f9dfe228c5c",
+        "type": "function",
+        "z": "6fecf9c0459d959c",
+        "name": "Set Format",
+        "func": "msg.params = [\n    msg.payload.ads_id,  // ads_id\n    msg.payload.property_name,  // property_name\n    parseInt(msg.payload.completion_year),  // completion_year (converted to integer)\n    parseFloat(msg.payload.monthly_rent.replace('RM', '').replace(' per month', '').replace(',', '').trim()),  // monthly_rent (converted to numeric)\n    msg.payload.location,  // location\n    msg.payload.property_type,  // property_type (taking the first part before comma)\n    parseInt(msg.payload.room_quantity),  // room_quantity (converted to integer)\n    parseInt(msg.payload.parking),  // parking (converted to integer)\n    parseInt(msg.payload.bathroom),  // bathroom (converted to integer)\n    parseFloat(msg.payload.size),  // size (converted to numeric)\n    msg.payload.furnished,  // furnished\n    msg.payload.facilities,  // facilities\n    msg.payload.additional_facilities,  // additional_facilities\n    new Date(), // createdon\n    new Date(),  // modifiedon\n    msg.payload.url\n];\n\nmsg.query = `INSERT INTO property (\n        ads_id,\n        prop_name,\n        completion_year,\n        monthly_rent,\n        location,\n        property_type,\n        rooms,\n        parking,\n        bathroom,\n        size,\n        furnished,\n        facilities,\n        additional_facilities,\n        createdon,\n        modifiedon,\n        url\n    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1950,
+        "y": 1300,
+        "wires": [
+            [
+                "85705dd54db9fcf1",
+                "f783ec18041f70ff"
+            ]
+        ]
+    },
+    {
+        "id": "43dd53518724f33e",
+        "type": "debug",
+        "z": "6fecf9c0459d959c",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2040,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "f783ec18041f70ff",
+        "type": "debug",
+        "z": "6fecf9c0459d959c",
+        "name": "Show Details",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2150,
+        "y": 1400,
+        "wires": []
+    },
+    {
+        "id": "3b89c8a4f4345b71",
+        "type": "inject",
+        "z": "6fecf9c0459d959c",
+        "name": "Get Property Data",
+        "props": [],
+        "repeat": "360",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 770,
+        "y": 900,
+        "wires": [
+            [
+                "bdd64cddde03343f"
+            ]
+        ]
+    },
+    {
+        "id": "bdd64cddde03343f",
+        "type": "function",
+        "z": "6fecf9c0459d959c",
+        "name": "Get Page Url",
+        "func": "// 定义URL列表\nconst urlList = [\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=3&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D3\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=4&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D4\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=5&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D5\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=6&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D6\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=7&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D7\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=8&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D8\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=9&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D9\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=10&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D10\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=11&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D11\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=12&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D12\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=13&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D13\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=14&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D14\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=15&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D15\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=16&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D16\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=17&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D17\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=18&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D18\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=19&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D19\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=20&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D20\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=21&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D21\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=22&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D22\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=23&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D23\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=24&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D24\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=25&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D25\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=26&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D26\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=27&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D27\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=28&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D28\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=29&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D29\",\n\"https://www.mudah.my/_next/data/W5eKGW6PQw5ZqmUlusl5u/list.json?category=2000&o=30&region=9&type=let&asPath=https%3A%2F%2Fwww.mudah.my%2Fkuala-lumpur%2Fproperties-for-rent%3Fo%3D30\"\n\n];\n\n// 获取当前索引，默认从0开始\nlet currentIndex = flow.get('currentIndex') || 0;\n\n// 检查是否处理完所有的URL\nif (currentIndex < urlList.length) {\n    // 获取当前索引对应的URL\n    let currentUrl = urlList[currentIndex];\n\n    // 设置msg.url为当前URL\n    msg.url = currentUrl;\n\n    // 设置HTTP请求方法和请求头\n    msg.method = \"GET\";\n    msg.headers = {\n        \"accept\": \"*/*\",\n        \"accept-language\": \"en-GB,en;q=0.9,zh-CN;q=0.8,zh;q=0.7,en-US;q=0.6\",\n        \"dnt\": \"1\",\n        \"referer\": \"https://www.mudah.my/malaysia/properties-for-rent\",\n        \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36\",\n        \"x-nextjs-data\": \"1\"\n    };\n\n    // 更新索引，指向下一个URL\n    currentIndex = currentIndex + 1;\n\n    // 将更新后的索引保存到flow上下文中\n    flow.set('currentIndex', currentIndex);\n\n    // 返回msg，将URL传递到下一个节点\n    return msg;\n} else {\n    // 如果所有URL都已经处理完，重置索引并停止流程\n    flow.set('currentIndex', 0); // 重置索引\n    return null; // 停止流程\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 900,
+        "wires": [
+            [
+                "ab1240beea77e4af"
+            ]
+        ]
+    },
+    {
+        "id": "137561d106b6c794",
+        "type": "http request",
+        "z": "6fecf9c0459d959c",
+        "name": "python",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:5000/scrape",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1810,
+        "y": 1140,
+        "wires": [
+            [
+                "43dd53518724f33e",
+                "cce37f9dfe228c5c"
+            ]
+        ]
+    },
+    {
+        "id": "f4e98625167b9eba",
+        "type": "inject",
+        "z": "6fecf9c0459d959c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{   \"url\": \"https://www.mudah.my/sri-jati-condo-jalan-klang-lama-old-klang-road-semi-furnish-2carpark-111286164.htm\" }",
+        "payloadType": "json",
+        "x": 1770,
+        "y": 1200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "60dedaa008d07eeb",
+        "type": "function",
+        "z": "6fecf9c0459d959c",
+        "name": "function 1",
+        "func": "// Check if the payload has a valid url field and if the URL has already been sent\nlet urlSent = flow.get('urlSent') || false;  // Check if the flag is set\n\nif (msg.payload && msg.payload.url && !urlSent) {\n    // If the URL exists and hasn't been sent already, store the URL and mark as sent\n    \n    flow.set('urlSent', true);  // Set the flag to true, indicating that the URL has been processed\n} else {\n    // If the URL is missing or has already been sent, set a default error message\n    msg.payload = msg.payload.url;\n}\n\n// Return the message with the payload (URL or error message)\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1580,
+        "y": 1300,
+        "wires": [
+            [
+                "11893b3bc0a5347e"
+            ]
+        ]
+    },
+    {
+        "id": "11893b3bc0a5347e",
+        "type": "delay",
+        "z": "6fecf9c0459d959c",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1720,
+        "y": 1300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9af233fd4bb48c5c",
+        "type": "function",
+        "z": "6fecf9c0459d959c",
+        "name": "LoopUrl",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    }
+]
